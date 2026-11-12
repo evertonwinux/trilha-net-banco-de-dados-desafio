@@ -325,3 +325,94 @@ REFERENCES [dbo].[Generos] ([Id])
 GO
 ALTER TABLE [dbo].[FilmesGenero] CHECK CONSTRAINT [FK__FilmesGen__IdGen__2E1BDC42]
 GO
+
+
+/* ============================================================
+   DESAFIO DIO - TRILHA .NET - BANCO DE DADOS
+   Consultas solicitadas no README.md
+   Execute esta seção após a criação e carga do banco Filmes.
+   ============================================================ */
+
+USE [Filmes]
+GO
+
+-- 1 - Buscar o nome e ano dos filmes
+SELECT Nome, Ano
+FROM Filmes
+GO
+
+-- 2 - Buscar o nome e ano dos filmes, ordenados pelo ano crescente
+SELECT Nome, Ano
+FROM Filmes
+ORDER BY Ano ASC
+GO
+
+-- 3 - Buscar o filme De Volta para o Futuro, trazendo nome, ano e duração
+SELECT Nome, Ano, Duracao
+FROM Filmes
+WHERE Nome = 'De Volta para o Futuro'
+GO
+
+-- 4 - Buscar os filmes lançados em 1997
+SELECT Nome, Ano
+FROM Filmes
+WHERE Ano = 1997
+GO
+
+-- 5 - Buscar os filmes lançados após o ano 2000
+SELECT Nome, Ano
+FROM Filmes
+WHERE Ano > 2000
+GO
+
+-- 6 - Buscar filmes com duração maior que 100 e menor que 150,
+--     ordenando pela duração crescente
+SELECT Nome, Duracao
+FROM Filmes
+WHERE Duracao > 100 AND Duracao < 150
+ORDER BY Duracao ASC
+GO
+
+-- 7 - Quantidade de filmes por ano.
+--     O README pede ordenação pela duração, mas como a consulta agrupa
+--     por ano, usamos a maior duração de cada ano como critério de ordenação.
+SELECT Ano, COUNT(*) AS QuantidadeFilmes
+FROM Filmes
+GROUP BY Ano
+ORDER BY MAX(Duracao) DESC
+GO
+
+-- 8 - Buscar atores do gênero masculino
+SELECT PrimeiroNome, UltimoNome
+FROM Atores
+WHERE Genero = 'M'
+GO
+
+-- 9 - Buscar atores do gênero feminino, ordenados pelo primeiro nome
+SELECT PrimeiroNome, UltimoNome
+FROM Atores
+WHERE Genero = 'F'
+ORDER BY PrimeiroNome ASC
+GO
+
+-- 10 - Buscar o nome do filme e o gênero
+SELECT F.Nome, G.Genero
+FROM Filmes AS F
+INNER JOIN FilmesGenero AS FG ON FG.IdFilme = F.Id
+INNER JOIN Generos AS G ON G.Id = FG.IdGenero
+GO
+
+-- 11 - Buscar o nome do filme e o gênero do tipo Mistério
+SELECT F.Nome, G.Genero
+FROM Filmes AS F
+INNER JOIN FilmesGenero AS FG ON FG.IdFilme = F.Id
+INNER JOIN Generos AS G ON G.Id = FG.IdGenero
+WHERE G.Genero = 'Mistério'
+GO
+
+-- 12 - Buscar o nome do filme e os atores, incluindo nome, sobrenome e papel
+SELECT F.Nome, A.PrimeiroNome, A.UltimoNome, EF.Papel
+FROM Filmes AS F
+INNER JOIN ElencoFilme AS EF ON EF.IdFilme = F.Id
+INNER JOIN Atores AS A ON A.Id = EF.IdAtor
+GO
